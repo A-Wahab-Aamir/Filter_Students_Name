@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<style>
+    #img{
+        width: 100%;
+        height: 100px;
+        object-fit: contain;
+      
+    }
+</style>
+</head>
+<body>
+
+    <div class="container-fluid bg-warning text-center p-5 display-3 lead">
+        <h1>FILTER STUDENTS NAME FROM JSON DATA</h1>
+        
+    </div>
+    <div class="container mt-1 p-5 text-center">
+        <p><a href="https://www.linkedin.com/in/abdul-wahab-amir-155a96211/">Click Me</a></p>
+
+        <select name="" id="select_id" class="form-control mt-3 mb-5" onclick="Filter(this.value)">
+            <option value="all">Select all Students</option>
+        </select>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Student Name</th>
+                    <th>Student Father Name</th>
+                    <th>Class</th>
+                    <th>Contact </th>
+                    <th>Profile</th>
+                </tr>
+            </thead>
+            <tbody id="table_body">
+
+            </tbody>
+        </table>
+    </div>
+
+    <script src="student.js"></script>
+
+    <script>
+        function DisplayAllData(){
+            for(var i=0;i < data.length; i=i+1){
+
+// calling table data
+document.getElementById('table_body').innerHTML += `
+<tr>
+    <td>${i}</td>
+        <td>${data[i].Name}</td>
+        <td>${data[i].f_Name}</td>
+        <td>${data[i].class}</td>
+        <td>${data[i].contact}</td>
+        <td><img src="${data[i].profile}" alt="" id='img'></td>
+</tr>
+
+`
+
+// calling dropdown id
+document.getElementById('select_id').innerHTML+=`
+<option value="${i}">${data[i].Name}</option>
+`
+}
+        }
+
+
+        // now we will filter all data on baisis of Selcted Id
+        function Filter(selected_id){
+
+if(selected_id === "all"){
+
+    document.getElementById('table_body').innerHTML = "";
+    document.getElementById('select_id').innerHTML=`
+    <option value="all">Select all Students</option>
+`
+    DisplayAllData()
+
+}
+else{
+
+    var selected_ID=[data[selected_id]];  // 2 , 3, 4, 5,6
+
+    for(var i=0;i < selected_ID.length; i=i+1){
+
+// calling table data
+document.getElementById('table_body').innerHTML = `
+<tr>
+    <td>${selected_id}</td>
+        <td>${selected_ID[i].Name}</td>
+        <td>${selected_ID[i].f_Name}</td>
+        <td>${selected_ID[i].class}</td>
+        <td>${selected_ID[i].contact}</td>
+        <td><img src="${selected_ID[i].profile}" alt="" id='img'></td>
+</tr>
+
+`
+    }
+
+
+
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// it will display all data accordingly
+        DisplayAllData()
+        
+    </script>
+</body>
+</html>
