@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-<style>
-    #img{
-        width: 100%;
-        height: 100px;
-        object-fit: contain;
-      
-    }
-</style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <style>
+        #img {
+            width: 100%;
+            height: 100px;
+            object-fit: contain;
+
+        }
+    </style>
 </head>
+
 <body>
 
     <div class="container-fluid bg-warning text-center p-5 display-3 lead">
         <h1>FILTER STUDENTS NAME FROM JSON DATA</h1>
-        
+
     </div>
     <div class="container mt-1 p-5 text-center">
         <p><a href="https://www.linkedin.com/in/abdul-wahab-amir-155a96211/">Click Me</a></p>
@@ -36,6 +41,20 @@
                     <th>Student Father Name</th>
                     <th>Class</th>
                     <th>Contact </th>
+                    <th>Gender
+                        <select name="" id="sel_gender" onclick="GenFilter(this.value)">
+                            <option value="all">All</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </th>
+                    <th>Dept
+                        <select name="" id="sel_dept" onclick="DeptFilter(this.value)">
+                            <option value="all">All</option>
+                            <option value="bio">Bio</option>
+                            <option value="engineering">Engineering</option>
+                        </select>
+                    </th>
                     <th>Profile</th>
                 </tr>
             </thead>
@@ -48,57 +67,159 @@
     <script src="student.js"></script>
 
     <script>
-        function DisplayAllData(){
-            for(var i=0;i < data.length; i=i+1){
+        function DisplayAllData() {
+            for (var i = 0; i < data.length; i = i + 1) {
 
-// calling table data
-document.getElementById('table_body').innerHTML += `
+                // calling table data
+                document.getElementById('table_body').innerHTML += `
 <tr>
-    <td>${i}</td>
+    <td>${data[i].id}</td>
         <td>${data[i].Name}</td>
         <td>${data[i].f_Name}</td>
         <td>${data[i].class}</td>
         <td>${data[i].contact}</td>
+        <td>${data[i].gender}</td>
+        <td>${data[i].dept}</td>
         <td><img src="${data[i].profile}" alt="" id='img'></td>
 </tr>
 
 `
 
-// calling dropdown id
-document.getElementById('select_id').innerHTML+=`
+                // calling dropdown id
+                document.getElementById('select_id').innerHTML += `
 <option value="${i}">${data[i].Name}</option>
 `
-}
+
+
+
+            }
+
         }
-
-
         // now we will filter all data on baisis of Selcted Id
-        function Filter(selected_id){
 
-if(selected_id === "all"){
 
-    document.getElementById('table_body').innerHTML = "";
-    document.getElementById('select_id').innerHTML=`
+        function Filter(id) {
+
+            if (id === "all") {
+
+                document.getElementById('table_body').innerHTML = "";
+                document.getElementById('select_id').innerHTML = `
     <option value="all">Select all Students</option>
 `
-    DisplayAllData()
+                DisplayAllData()
 
-}
-else{
+            }
+            else {
 
-    var selected_ID=[data[selected_id]];  // 2 , 3, 4, 5,6
+                var selected_ID = data.filter((d) => d.id == id)
 
-    for(var i=0;i < selected_ID.length; i=i+1){
+                for (var i = 0; i < selected_ID.length; i = i + 1) {
 
-// calling table data
-document.getElementById('table_body').innerHTML = `
+                    // calling table data
+                    document.getElementById('table_body').innerHTML = `
 <tr>
-    <td>${selected_id}</td>
+    <td>${selected_ID[i].id}</td>
         <td>${selected_ID[i].Name}</td>
         <td>${selected_ID[i].f_Name}</td>
         <td>${selected_ID[i].class}</td>
         <td>${selected_ID[i].contact}</td>
+        <td>${selected_ID[i].gender}</td>
+        <td>${selected_ID[i].dept}</td>
         <td><img src="${selected_ID[i].profile}" alt="" id='img'></td>
+</tr>
+
+`
+                }
+
+
+
+            }
+
+        }
+
+
+
+        // selct specific gender
+
+
+        function GenFilter(val) {
+            let deptFilter= document.getElementById('sel_dept').value;
+if (val === "all" && deptFilter === "all") {
+    document.getElementById('table_body').innerHTML = "";
+    DisplayAllData()
+
+}
+else {
+    document.getElementById('table_body').innerHTML = "";
+    let gender=val.toLowerCase();  // m , f ,all
+
+    var selected_ID = data.filter((d) => {
+        return (
+            (d.gender.toLowerCase() === gender || gender === "all") &&
+            (d.dept.toLowerCase()=== deptFilter || deptFilter==="all")
+        )
+    })
+
+    for (var i = 0; i < selected_ID.length; i = i + 1) {
+
+        // calling table data
+        document.getElementById('table_body').innerHTML += `
+<tr>
+<td>${selected_ID[i].id}</td>
+<td>${selected_ID[i].Name}</td>
+<td>${selected_ID[i].f_Name}</td>
+<td>${selected_ID[i].class}</td>
+<td>${selected_ID[i].contact}</td>
+<td>${selected_ID[i].gender}</td>
+<td>${selected_ID[i].dept}</td>
+<td><img src="${selected_ID[i].profile}" alt="" id='img'></td>
+</tr>
+
+`
+    }
+
+
+
+}
+
+}
+
+
+
+
+// select specific dept
+
+function DeptFilter(val) {
+            let genFilter= document.getElementById('sel_gender').value;
+if (val === "all" && genFilter === "all") {
+    document.getElementById('table_body').innerHTML = "";
+    DisplayAllData()
+
+}
+else {
+    document.getElementById('table_body').innerHTML = "";
+    let dept=val.toLowerCase();  
+
+    var selected_ID = data.filter((d) => {
+        return (
+            (d.gender.toLowerCase() === genFilter || genFilter === "all") &&
+            (d.dept.toLowerCase()===val || val==="all")
+        )
+    })
+
+    for (var i = 0; i < selected_ID.length; i = i + 1) {
+
+        // calling table data
+        document.getElementById('table_body').innerHTML += `
+<tr>
+<td>${selected_ID[i].id}</td>
+<td>${selected_ID[i].Name}</td>
+<td>${selected_ID[i].f_Name}</td>
+<td>${selected_ID[i].class}</td>
+<td>${selected_ID[i].contact}</td>
+<td>${selected_ID[i].gender}</td>
+<td>${selected_ID[i].dept}</td>
+<td><img src="${selected_ID[i].profile}" alt="" id='img'></td>
 </tr>
 
 `
@@ -117,17 +238,10 @@ document.getElementById('table_body').innerHTML = `
 
 
 
-
-
-
-
-
-
-
-
-// it will display all data accordingly
+        // it will display all data accordingly
         DisplayAllData()
-        
+
     </script>
 </body>
+
 </html>
